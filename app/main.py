@@ -9,7 +9,7 @@ APP_FOLDER = Path(__file__).absolute().parent
 TASK_FILE = APP_FOLDER / "task.txt"
 INTERVAL = os.environ.get("INTERVAL", "5s")
 
-app = FastAPI(title="PBD Tools API")
+app = FastAPI()
 app.mount("/static", StaticFiles(directory=f"{APP_FOLDER}/static"), name="static")
 templates = Jinja2Templates(directory=f"{APP_FOLDER}/templates")
 
