@@ -9,14 +9,21 @@ APP_FOLDER = Path(__file__).absolute().parent
 TASK_FILE = APP_FOLDER / "task.txt"
 INTERVAL = os.environ.get("INTERVAL", "5s")
 
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=f"{APP_FOLDER}/static"), name="static")
 templates = Jinja2Templates(directory=f"{APP_FOLDER}/templates")
 
 
+def get_current_task() -> str:
+    if not TASK_FILE.exists():
+        TASK_FILE.write_text("Define your next task.")
+    return TASK_FILE.read_text()
+
+
 @app.get("/")
 async def index(request: Request) -> Jinja2Templates.TemplateResponse:
-    task = TASK_FILE.read_text()
+    task = get_current_task()
     return templates.TemplateResponse(
         "index.html", {"request": request, "task": task, "interval": INTERVAL}
     )
@@ -24,7 +31,7 @@ async def index(request: Request) -> Jinja2Templates.TemplateResponse:
 
 @app.get("/get")
 async def get_task(request: Request) -> Jinja2Templates.TemplateResponse:
-    task = TASK_FILE.read_text()
+    task = get_current_task()
     return templates.TemplateResponse(
         "components/display_card.html",
         {"request": request, "task": task, "interval": INTERVAL},
@@ -33,7 +40,7 @@ async def get_task(request: Request) -> Jinja2Templates.TemplateResponse:
 
 @app.get("/set")
 async def task_form(request: Request) -> Jinja2Templates.TemplateResponse:
-    task = TASK_FILE.read_text()
+    task = get_current_task()
     return templates.TemplateResponse(
         "components/form_card.html", {"request": request, "task": task}
     )
