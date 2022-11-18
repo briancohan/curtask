@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+python-multipart = "*"
+uvicorn = "*"
+jinja2 = "*"
+
+[dev-packages]
+black = "*"
+mypy = "*"
+pre-commit = "*"
+flake8-annotations = "*"
+
+[requires]
+python_version = "3.11"

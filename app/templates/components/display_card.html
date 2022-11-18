@@ -1,0 +1,21 @@
+{% extends 'components/base_card.html' %}
+
+{% block title %}
+Current Task
+{% endblock %}
+
+{% block button %}
+<button type="button"
+    hx-get="{{ url_for('task_form') }}"
+    hx-target="#target"
+    class="relative inline-flex items-center rounded-md border border-transparent bg-sky-700 px-4 py-2 text-sm font-medium text-neutral-300 shadow-sm hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2">
+    New Task</button>
+{% endblock %}
+
+{% block content %}
+<p class="px-4 sm:px-6 py-8 text-xl font-bold text-gray-100">{{ task }}</p>
+{% endblock %}
+
+{% block extra %}
+<div class="hidden" hx-get="{{ url_for('get_task') }}" hx-trigger="every {{ interval }}" hx-target="#target"></div>
+{% endblock %}

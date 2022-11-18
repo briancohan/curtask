@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}{% endblock %}">
+    <link rel="shortcut icon" href="{{ url_for('static', path='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <script async src="{{ url_for('static', path='/js/vendor/htmx.1.8.0.min.js') }}"></script>
+    <script async src="{{ url_for('static', path='/js/vendor/hyperscript.0.9.7.min.js') }}"></script>
+    <title>Current Task</title>
+</head>
+
+<body class="bg-neutral-800">
+    <div class="flex justify-center items-center md:min-h-screen" id="target">
+        {% include 'components/display_card.html' %}
+    </div>
+</body>
+
+</html>
