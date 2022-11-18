@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 
 APP_FOLDER = Path(__file__).absolute().parent
 TASK_FILE = APP_FOLDER / "task.txt"
-INTERVAL = os.environ.get("INTERVAL", "5s")
+INTERVAL = os.environ.get("INTERVAL", "5")
 
 
 app = FastAPI()
