@@ -5,11 +5,11 @@ from fastapi import FastAPI, Form, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from .db import TextDB
+from .db import JsonDB
 
 APP_FOLDER = Path(__file__).absolute().parent
 INTERVAL = os.environ.get("INTERVAL", "5")
-DB = TextDB(APP_FOLDER / "task.txt")
+DB = JsonDB(APP_FOLDER / "tasks.json")
 
 
 app = FastAPI()

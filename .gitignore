@@ -161,4 +161,4 @@ cython_debug/
 
 requirements.txt
 node_modules/
-task.txt
+task*.*
