@@ -1,5 +1,6 @@
 FROM python:3.10-slim-buster
 
+RUN mkdir /data
 WORKDIR /code
 
 COPY ./requirements.txt /code/requirements.txt

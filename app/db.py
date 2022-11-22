@@ -50,3 +50,10 @@ class JsonDB(BaseDB):
             return data[-1]["task"]
         except IndexError:
             return NO_TASK
+
+
+def db_from_file(db_file: Path) -> TextDB | JsonDB:
+    if db_file.suffix == ".json":
+        return JsonDB(db_file=db_file)
+    else:
+        return TextDB(db_file=db_file)

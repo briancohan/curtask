@@ -1,20 +1,14 @@
-import os
-from pathlib import Path
-
 from fastapi import FastAPI, Form, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from .db import JsonDB
-
-APP_FOLDER = Path(__file__).absolute().parent
-INTERVAL = os.environ.get("INTERVAL", "5")
-DB = JsonDB(APP_FOLDER / "tasks.json")
-
+from .config import Config
+from .db import db_from_file
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory=f"{APP_FOLDER}/static"), name="static")
-templates = Jinja2Templates(directory=f"{APP_FOLDER}/templates")
+app.mount("/static", StaticFiles(directory=Config.STATIC_DIR), name="static")
+templates = Jinja2Templates(directory=Config.TEMPLATE_DIR)
+db = db_from_file(Config.DATA_FILE)
 
 
 @app.get("/")
@@ -22,7 +16,11 @@ async def index(request: Request) -> Jinja2Templates.TemplateResponse:
 
     return templates.TemplateResponse(
         "index.html",
-        {"request": request, "task": DB.get_current_task(), "interval": INTERVAL},
+        {
+            "request": request,
+            "task": db.get_current_task(),
+            "interval": Config.INTERVAL,
+        },
     )
 
 
@@ -30,14 +28,19 @@ async def index(request: Request) -> Jinja2Templates.TemplateResponse:
 async def get_task(request: Request) -> Jinja2Templates.TemplateResponse:
     return templates.TemplateResponse(
         "components/display_card.html",
-        {"request": request, "task": DB.get_current_task(), "interval": INTERVAL},
+        {
+            "request": request,
+            "task": db.get_current_task(),
+            "interval": Config.INTERVAL,
+        },
     )
 
 
 @app.get("/set")
 async def task_form(request: Request) -> Jinja2Templates.TemplateResponse:
     return templates.TemplateResponse(
-        "components/form_card.html", {"request": request, "task": DB.get_current_task()}
+        "components/form_card.html",
+        {"request": request, "task": db.get_current_task()},
     )
 
 
@@ -45,8 +48,8 @@ async def task_form(request: Request) -> Jinja2Templates.TemplateResponse:
 async def set_task(
     request: Request, task: str = Form()
 ) -> Jinja2Templates.TemplateResponse:
-    DB.set_current_task(task)
+    db.set_current_task(task)
     return templates.TemplateResponse(
         "components/display_card.html",
-        {"request": request, "task": task, "interval": INTERVAL},
+        {"request": request, "task": task, "interval": Config.INTERVAL},
     )
